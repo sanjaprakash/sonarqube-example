@@ -53,6 +53,10 @@
     </pluginManagement>
   </build>
 
+<settings>
+    <pluginGroups>
+        <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+    </pluginGroups>
   <profiles>
     <profile>
       <id>coverage</id>
@@ -83,8 +87,8 @@
       </build>
     </profile>
   </profiles>
+</project>
+</settings>
     <pluginGroups>
        <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
     </pluginGroups>
-</project>
-
