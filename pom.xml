@@ -84,3 +84,7 @@
     </profile>
   </profiles>
 </project>
+
+<pluginGroups>
+     <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+</pluginGroups>
