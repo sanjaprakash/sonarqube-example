@@ -83,8 +83,8 @@
       </build>
     </profile>
   </profiles>
+    <pluginGroups>
+       <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+    </pluginGroups>
 </project>
 
-<pluginGroups>
-     <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
-</pluginGroups>
