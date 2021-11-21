@@ -1,0 +1,62 @@
+pipeline{
+    agent any
+    tools {
+        jdk 'Java_Home'
+        maven 'Maven_Home' 
+    }
+    triggers {
+        cron 'H H * * *'
+   }
+    options {
+        buildDiscarder logRotator(daysToKeepStr: '9', numToKeepStr: '7')
+        timeout(time: 1, unit: 'HOURS') 
+    }
+    environment{
+        tomcatweb = "/var/lib/tomcat/webapps/"
+    }
+    parameters{
+        booleanParam(name: 'DEPLOY', defaultValue: true, description: 'make it TRUE if you want to deploy')
+        gitParameter(branch: '', branchFilter: '.*', defaultValue: 'master', description: 'enter the branch name', name: 'branch', quickFilterEnabled: false, selectedValue: 'NONE', sortMode: 'NONE', tagFilter: '*', type: 'PT_BRANCH')
+    }
+stages{
+    stage('checkout'){
+        steps{
+            checkout([
+                $class: 'GitSCM', 
+                branches: [[name: "${params.branch}"]], 
+                extensions: [], 
+                userRemoteConfigs: [[url: 'https://github.com/sanjaprakash/sonarqube-example.git']]
+            ])
+        }
+    }
+   stage('SonarQube Analysis') {
+        steps{
+          withSonarQubeEnv('SonarQube') { 
+          sh "/opt/sonarqube/bin/mvn sonar:sonar"
+        }
+    }
+	}
+    stage("build"){
+        steps{
+            echo "building"
+            // sh """
+            // mvn clean install
+            // """
+        }
+    }
+    stage("deploy"){
+        when {
+                // Only say hello if a "greeting" is requested
+                expression { params.DEPLOY }
+            }
+        steps{
+              sh "cp target/java-tomcat-maven-example.war ${tomcatweb}"
+}
+}
+}
+post{
+    always{
+        cleanWs()
+    }
+}
+}
