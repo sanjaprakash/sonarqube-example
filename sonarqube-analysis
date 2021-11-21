@@ -29,21 +29,22 @@ stages{
             ])
         }
     }
+     stage("build"){
+        steps{
+            echo "building"
+            sh """
+            mvn clean package
+            """
+        }
+    }
    stage('SonarQube Analysis') {
         steps{
           withSonarQubeEnv('SonarQube') { 
-          sh "/opt/sonarqube/bin/mvn sonar:sonar"
+          sh "mvn sonar:sonar"
         }
     }
 	}
-    stage("build"){
-        steps{
-            echo "building"
-            // sh """
-            // mvn clean install
-            // """
-        }
-    }
+   
     stage("deploy"){
         when {
                 // Only say hello if a "greeting" is requested
